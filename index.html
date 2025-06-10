@@ -219,15 +219,15 @@
   </a>
 
   <div id="social-bubbles">
-    <a href="https://www.facebook.com/donbeltranecua/" target="_blank"
-      ><i class="fab fa-facebook-f"></i
-    ></a>
-    <a href="https://www.instagram.com/donbeltranecu/" target="_blank"
-      ><i class="fab fa-instagram"></i
-    ></a>
-    <a href="https://www.tiktok.com/@donbeltranusa" target="_blank"
-      ><i class="fab fa-tiktok"></i
-    ></a>
+    <a href="https://www.facebook.com/donbeltranecua/" target="_blank">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.instagram.com/donbeltranecu/" target="_blank">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.tiktok.com/@donbeltranusa" target="_blank">
+      <i class="fab fa-tiktok"></i>
+    </a>
   </div>
 
   <div id="taxi"></div>
@@ -236,14 +236,12 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // MAPA CON GEOLOCALIZACIÓN
     document.addEventListener("DOMContentLoaded", function () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           function (position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-
             const map = L.map("map").setView([lat, lng], 15);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -267,14 +265,13 @@
       }
     });
 
-    // REPRODUCTOR DE AUDIO
     const songs = [
       "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3"
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3",
     ];
 
     songs.sort(() => Math.random() - 0.5);
@@ -320,6 +317,20 @@
     }
 
     audio.addEventListener("ended", nextSong);
+  </script>
+
+  <!-- BLOQUE PARA FORZAR RECARGA DEL MANIFEST UNA SOLA VEZ -->
+  <script>
+    if (!localStorage.getItem('manifestUpdated')) {
+      const newManifest = document.createElement('link');
+      newManifest.rel = 'manifest';
+      newManifest.href = '/manifest.json?v=' + new Date().getTime();
+      document.head.appendChild(newManifest);
+      localStorage.setItem('manifestUpdated', 'true');
+      setTimeout(() => {
+        location.reload(true);
+      }, 100);
+    }
   </script>
 </body>
 </html>
