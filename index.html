@@ -7,7 +7,7 @@
   <link rel="manifest" href="/manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="MICHAEL TAXI LLC" />
-  <link rel="apple-touch-icon" href="/assets/iconodeapp.png" />
+  <link rel="apple-touch-icon" href="/assets/LOGOicono.png" />
 
   <!-- Font Awesome para íconos de redes sociales -->
   <link
@@ -30,12 +30,8 @@
 
     body {
       font-family: Arial, sans-serif;
-      /* Aquí pones la URL de tu imagen, sin tocar nada más */
       background: url('fondotaximichael.png') no-repeat center center fixed;
       background-size: cover;
-
-      /* background: #f2f2f2; */ /* fondo blanco quitado */
-
       color: #222;
       overflow-x: hidden;
       min-height: 100vh;
@@ -73,7 +69,7 @@
 
     #player-container {
       width: 320px;
-      margin: 20px auto 5px auto; /* Menor margen inferior para juntar más con WhatsApp */
+      margin: 20px auto 5px auto;
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 77, 64, 0.5);
@@ -107,9 +103,8 @@
       color: #0d47a1;
     }
 
-    /* Ajustamos margen para que no esté tan separado de WhatsApp */
     #whatsapp-eds {
-      margin: 8px auto 12px auto; /* Centrado con márgenes reducidos arriba y abajo */
+      margin: 8px auto 12px auto;
       background: #25d366;
       color: white;
       font-weight: bold;
@@ -132,8 +127,7 @@
     }
 
     @keyframes pulseWhatsApp {
-      0%,
-      100% {
+      0%, 100% {
         transform: scale(1);
         box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7);
       }
@@ -147,7 +141,7 @@
       display: flex;
       justify-content: center;
       gap: 20px;
-      margin: 0 0 15px 0; /* Margen inferior para separar un poco del borde */
+      margin: 0 0 15px 0;
     }
 
     #social-bubbles a {
@@ -171,7 +165,6 @@
       color: white;
     }
 
-    /* Estilo y animación taxi */
     #taxi {
       position: fixed;
       bottom: 20px;
@@ -281,7 +274,7 @@
       "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3"
     ];
 
     songs.sort(() => Math.random() - 0.5);
