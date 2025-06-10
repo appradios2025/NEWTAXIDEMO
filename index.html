@@ -12,6 +12,9 @@
 
   <!-- Font Awesome para íconos de redes sociales -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Leaflet CSS para mapa -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     * {
@@ -133,6 +136,38 @@
       transition: left 6s ease-in-out;
       z-index: 9999;
     }
+
+    /* Nuevo: WhatsApp separado y animado (EDS) */
+    #whatsapp-eds {
+      position: fixed;
+      bottom: 80px;
+      right: 15px;
+      background: #25d366;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 30px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      animation: pulseWhatsApp 2.5s ease-in-out infinite;
+      z-index: 10000;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    #whatsapp-eds i {
+      font-size: 22px;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.3));
+    }
+
+    @keyframes pulseWhatsApp {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 6px 12px rgba(37, 211, 102, 1); }
+    }
   </style>
 </head>
 <body>
@@ -142,10 +177,7 @@
   </header>
 
   <div id="map-container">
-    <iframe id="map"
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.751080481048!2d-79.91800022403882!3d-2.1482955978431936!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x902d73ef8be0074b%3A0x91b3ef76a2ad8584!2sDon%20Beltran!5e0!3m2!1ses-419!2sec!4v1716682032685!5m2!1ses-419!2sec"
-      width="300" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div id="map"></div>
   </div>
 
   <div id="player-container">
@@ -161,15 +193,50 @@
   </div>
 
   <div id="social-bubbles">
-    <a href="https://wa.me/message/26OXOEPDCREJE1" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <!-- Quité WhatsApp de aquí -->
     <a href="https://www.facebook.com/donbeltranecua/" target="_blank"><i class="fab fa-facebook-f"></i></a>
     <a href="https://www.instagram.com/donbeltranecu/" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://www.tiktok.com/@donbeltranusa" target="_blank"><i class="fab fa-tiktok"></i></a>
   </div>
 
+  <!-- WhatsApp separado EDS -->
+  <a id="whatsapp-eds" href="https://wa.me/message/26OXOEPDCREJE1" target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    Escríbenos por WhatsApp
+  </a>
+
   <div id="taxi"></div>
 
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
+    // MAPA CON GEOLOCALIZACIÓN
+    document.addEventListener("DOMContentLoaded", function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          const map = L.map('map').setView([lat, lng], 15);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+          }).addTo(map);
+
+          L.marker([lat, lng]).addTo(map)
+            .bindPopup("Estás aquí")
+            .openPopup();
+        }, function () {
+          document.getElementById('map').innerHTML = "<p>No se pudo obtener tu ubicación.</p>";
+        });
+      } else {
+        document.getElementById('map').innerHTML = "<p>Tu navegador no soporta geolocalización.</p>";
+      }
+    });
+
+    // REPRODUCTOR DE AUDIO
     const songs = [
       "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
@@ -225,20 +292,17 @@
       nextSong();
     });
 
-    setInterval(() => {
-      const taxi = document.getElementById('taxi');
-      taxi.style.left = '110%';
-      setTimeout(() => {
-        taxi.style.left = '-120px';
-      }, 3000);
-    }, 15000);
+    // TAXI ANIMADO
+    let taxiGoingRight = true;
 
     document.body.addEventListener('click', () => {
       const taxi = document.getElementById('taxi');
-      taxi.style.left = 'calc(100% + 120px)';
-      setTimeout(() => {
+      if (taxiGoingRight) {
+        taxi.style.left = 'calc(100% + 120px)';
+      } else {
         taxi.style.left = '-120px';
-      }, 2200);
+      }
+      taxiGoingRight = !taxiGoingRight;
     });
   </script>
 </body>

@@ -16,12 +16,14 @@ body {
   align-items: center;
 }
 
+/* EDS eliminado solo aquí */
 header {
   width: 100%;
   padding: 10px 20px;
   background: #0D47A1;
   display: flex;
   align-items: center;
+  /* margin: 0;  <-- eliminado */
 }
 
 #logo {
@@ -112,6 +114,16 @@ header {
 }
 
 /* Taxi animado */
+@keyframes moverDerecha {
+  0% { left: -120px; }
+  100% { left: calc(100vw + 120px); }
+}
+
+@keyframes moverIzquierda {
+  0% { left: calc(100vw + 120px); }
+  100% { left: -120px; }
+}
+
 #taxi {
   position: fixed;
   bottom: 20px;
@@ -120,6 +132,13 @@ header {
   height: 50px;
   background: url('assets/taximichael.png') no-repeat center/contain;
   pointer-events: none;
-  transition: left 6s ease-in-out;
   z-index: 9999;
+}
+
+#taxi.mover-derecha {
+  animation: moverDerecha 3s ease-in-out forwards;
+}
+
+#taxi.mover-izquierda {
+  animation: moverIzquierda 3s ease-in-out forwards;
 }
