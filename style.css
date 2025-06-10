@@ -6,14 +6,10 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  color: #222;
-  overflow-x: hidden;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background-image: url('fondotaximichael.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 header {
