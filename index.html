@@ -97,6 +97,36 @@
       color: #0D47A1;
     }
 
+    #whatsapp-eds {
+      margin: 20px auto;
+      background: #25d366;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 30px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      animation: pulseWhatsApp 2.5s ease-in-out infinite;
+      text-decoration: none;
+      user-select: none;
+      justify-content: center;
+      width: fit-content;
+    }
+
+    #whatsapp-eds i {
+      font-size: 22px;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.3));
+    }
+
+    @keyframes pulseWhatsApp {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 6px 12px rgba(37, 211, 102, 1); }
+    }
+
     #social-bubbles {
       display: flex;
       justify-content: center;
@@ -136,38 +166,6 @@
       transition: left 6s ease-in-out;
       z-index: 9999;
     }
-
-    /* Nuevo: WhatsApp separado y animado (EDS) */
-    #whatsapp-eds {
-      position: fixed;
-      bottom: 80px;
-      right: 15px;
-      background: #25d366;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
-      border-radius: 30px;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      cursor: pointer;
-      animation: pulseWhatsApp 2.5s ease-in-out infinite;
-      z-index: 10000;
-      text-decoration: none;
-      user-select: none;
-    }
-
-    #whatsapp-eds i {
-      font-size: 22px;
-      filter: drop-shadow(0 0 1px rgba(0,0,0,0.3));
-    }
-
-    @keyframes pulseWhatsApp {
-      0%, 100% { transform: scale(1); box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7); }
-      50% { transform: scale(1.1); box-shadow: 0 6px 12px rgba(37, 211, 102, 1); }
-    }
   </style>
 </head>
 <body>
@@ -192,18 +190,17 @@
     <div class="track-name" id="trackName">Cargando canción...</div>
   </div>
 
-  <div id="social-bubbles">
-    <!-- Quité WhatsApp de aquí -->
-    <a href="https://www.facebook.com/donbeltranecua/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://www.instagram.com/donbeltranecu/" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.tiktok.com/@donbeltranusa" target="_blank"><i class="fab fa-tiktok"></i></a>
-  </div>
-
-  <!-- WhatsApp separado EDS -->
+  <!-- WhatsApp botón entre reproductor y redes sociales -->
   <a id="whatsapp-eds" href="https://wa.me/message/26OXOEPDCREJE1" target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp">
     <i class="fab fa-whatsapp"></i>
     Escríbenos por WhatsApp
   </a>
+
+  <div id="social-bubbles">
+    <a href="https://www.facebook.com/donbeltranecua/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/donbeltranecu/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.tiktok.com/@donbeltranusa" target="_blank"><i class="fab fa-tiktok"></i></a>
+  </div>
 
   <div id="taxi"></div>
 
@@ -307,3 +304,4 @@
   </script>
 </body>
 </html>
+
