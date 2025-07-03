@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,8 +21,178 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- Aquí enlaza tu CSS externo -->
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      /* Aquí pones la URL de tu imagen, sin tocar nada más */
+      background: url('fondotaximichael.png') no-repeat center center fixed;
+      background-size: cover;
+
+      /* background: #f2f2f2; */ /* fondo blanco quitado */
+
+      color: #222;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 10px 20px;
+      background: #0d47a1;
+      display: flex;
+      align-items: center;
+    }
+
+    #logo {
+      height: 60px;
+    }
+
+    #map-container {
+      margin: 20px auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      border: 5px solid #0d47a1;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    #player-container {
+      width: 320px;
+      margin: 20px auto 5px auto; /* Menor margen inferior para juntar más con WhatsApp */
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 77, 64, 0.5);
+      padding: 10px;
+      text-align: center;
+    }
+
+    #controls {
+      margin-top: 10px;
+    }
+
+    #controls button {
+      background: #0d47a1;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      padding: 8px 15px;
+      margin: 0 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #controls button:hover {
+      background: #00796b;
+    }
+
+    .track-name {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #0d47a1;
+    }
+
+    /* Ajustamos margen para que no esté tan separado de WhatsApp */
+    #whatsapp-eds {
+      margin: 8px auto 12px auto; /* Centrado con márgenes reducidos arriba y abajo */
+      background: #25d366;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 30px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      animation: pulseWhatsApp 2.5s ease-in-out infinite;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    #whatsapp-eds i {
+      font-size: 22px;
+      filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes pulseWhatsApp {
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 6px 12px rgba(37, 211, 102, 1);
+      }
+    }
+
+    #social-bubbles {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 0 0 15px 0; /* Margen inferior para separar un poco del borde */
+    }
+
+    #social-bubbles a {
+      font-size: 32px;
+      color: #0d47a1;
+      background: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 77, 64, 0.5);
+      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+      text-decoration: none;
+    }
+
+    #social-bubbles a:hover {
+      transform: scale(1.2);
+      background: #0d47a1;
+      color: white;
+    }
+
+    /* Estilo y animación taxi */
+    #taxi {
+      position: fixed;
+      bottom: 20px;
+      left: -120px;
+      width: 100px;
+      height: 50px;
+      background: url("assets/taximichael.png") no-repeat center/contain;
+      pointer-events: none;
+      z-index: 9999;
+      animation: taxiMove 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes taxiMove {
+      0% {
+        left: -120px;
+      }
+      100% {
+        left: 110vw;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -70,16 +239,6 @@
 
   <div id="taxi"></div>
 
-  <!-- Burbuja para Android -->
-  <div id="install-bubble" class="hidden">
-    Instalar app
-  </div>
-
-  <!-- Mensaje para iPhone -->
-  <div id="ios-install-info" class="hidden">
-    Para instalar esta app en tu iPhone: toca el ícono de compartir en Safari y luego "Añadir a pantalla de inicio"
-  </div>
-
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -123,47 +282,47 @@
       "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHECHA%20ECUATORIANA%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%202%20.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%205.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%202.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%203.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%204.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3"
-    ];
+    "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/CHECHA%20ECUATORIANA%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%202%20.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%205.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%201.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%202.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%203.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%204.mp3",
+  "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3"
+   ];
 
     songs.sort(() => Math.random() - 0.5);
 
@@ -208,22 +367,6 @@
     }
 
     audio.addEventListener("ended", nextSong);
-
-
-    // BURBUJA DE INSTALAR APP EN ANDROID Y MENSAJE PARA IOS
-    document.addEventListener("DOMContentLoaded", () => {
-      const isAndroid = /Android/i.test(navigator.userAgent);
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-      const installBubble = document.getElementById("install-bubble");
-      const iosInfo = document.getElementById("ios-install-info");
-
-      if (isAndroid) {
-        installBubble.classList.remove("hidden");
-      } else if (isIOS) {
-        iosInfo.classList.remove("hidden");
-      }
-    });
   </script>
 </body>
 </html>

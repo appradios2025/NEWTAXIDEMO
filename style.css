@@ -1,5 +1,4 @@
-
-/* Todo tu CSS original sin cambios */
+/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -152,4 +151,18 @@ header {
 /* Animaciones taxi */
 @keyframes moverDerecha {
   0% { left: -120px; }
-  100
+  100% { left: calc(100vw + 120px); }
+}
+
+@keyframes moverIzquierda {
+  0% { left: calc(100vw + 120px); }
+  100% { left: -120px; }
+}
+
+#taxi.mover-derecha {
+  animation: moverDerecha 3s ease-in-out forwards;
+}
+
+#taxi.mover-izquierda {
+  animation: moverIzquierda 3s ease-in-out forwards;
+}
