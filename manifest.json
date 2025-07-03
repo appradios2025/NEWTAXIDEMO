@@ -1,7 +1,7 @@
 
 {
   "name": "Michael Taxi LLC",
-  "short_name": "Taxi Michael",
+  "short_name": "MICHAELTAXI",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0D47A1",
@@ -9,12 +9,12 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "iconologo.png",
+      "src": "iconologo.webp",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "iconologo.png",
+      "src": "iconologo.webp",
       "sizes": "512x512",
       "type": "image/png"
     }
