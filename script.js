@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ======= AUDIO ============
 const songs = [
-  "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
+ "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
@@ -71,7 +71,8 @@ const songs = [
       "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%204.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%205.mp3",
       "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%201.mp3",
-      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%202.mp3"];
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%202.mp3"
+];
 songs.sort(() => Math.random() - 0.5);
 
 let currentIndex = 0;
