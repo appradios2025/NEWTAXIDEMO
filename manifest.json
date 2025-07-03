@@ -1,20 +1,20 @@
 
 {
   "name": "Michael Taxi LLC",
-  "short_name": "MichaelTaxi",
+  "short_name": "Taxi Michael",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0D47A1",
   "theme_color": "#0D47A1",
-  "description": "App PWA de Michael Taxi LLC",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "iconodeapp.webp",
+      "src": "iconologo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "LOGOicono.webp",
+      "src": "iconologo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
