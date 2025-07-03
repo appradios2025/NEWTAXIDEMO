@@ -1,101 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Michael Taxi Llc</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="/manifest.json" />
+  <title>Michael Taxi LLC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="./manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="MICHAEL TAXI LLC" />
   <link rel="apple-touch-icon" href="iconologo.png" />
 
-  <!-- Font Awesome para íconos de redes sociales -->
+  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
 
-  <!-- Leaflet CSS para mapa -->
+  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- Tu CSS principal -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./style.css" />
 
-  <style>
-    /* Estilos para la burbuja y cuadro instruccional */
-
-    /* Burbuja azul para Android */
-    #install-btn {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      background: #007bff;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5);
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10001;
-      user-select: none;
-      display: none;
-      transition: opacity 0.3s ease;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-    }
-    #install-btn.show {
-      display: block;
-      opacity: 1;
-    }
-
-    /* Cuadro negro para iPhone con instrucciones */
-    #ios-install-info {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      color: white;
-      padding: 10px 15px;
-      border-radius: 12px;
-      font-size: 14px;
-      max-width: 280px;
-      text-align: center;
-      z-index: 10001;
-      font-family: Arial, sans-serif;
-      display: none;
-      line-height: 1.3;
-      user-select: none;
-    }
-    #ios-install-info.show {
-      display: block;
-      animation: fadein 0.5s ease forwards;
-    }
-    #ios-install-info button {
-      margin-top: 8px;
-      background: #007bff;
-      border: none;
-      padding: 6px 12px;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    @keyframes fadein {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-  </style>
 </head>
 <body>
   <header>
-    <img id="logo" src="assets/michaellogo.png" alt="Logo" />
+    <img id="logo" src="assets/michaellogo.png" alt="Logo Michael Taxi" />
   </header>
 
   <div id="map-container">
@@ -138,82 +69,24 @@
 
   <div id="taxi"></div>
 
-  <!-- Burbuja de instalación para Android -->
-  <div id="install-btn" role="button" tabindex="0" aria-label="Descargar app Michael Taxi LLC">
-    Descargar app
+  <!-- Burbuja Descargar App para Android -->
+  <div id="install-banner" style="display:none;">
+    <button id="btn-install-app">⬇️ Descargar app</button>
+    <button id="btn-install-close" aria-label="Cerrar aviso">✖️</button>
   </div>
 
-  <!-- Cuadro instrucciones para iPhone -->
-  <div id="ios-install-info" role="alert">
-    Para instalar esta app, toca <strong>Compartir</strong> y luego <strong>"Añadir a pantalla de inicio"</strong>.
-    <br />
-    <button id="ios-install-close">Cerrar</button>
+  <!-- Cuadro info para iPhone -->
+  <div id="ios-instruction" style="display:none;">
+    <p>
+      Para instalar esta app en tu iPhone: <br />
+      Presiona el ícono <strong>Compartir</strong> abajo y luego <strong>Agregar a pantalla de inicio</strong>.
+    </p>
+    <button id="btn-ios-close" aria-label="Cerrar instrucciones">Cerrar</button>
   </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Tu script principal -->
-  <script src="script.js"></script>
-
-  <script>
-    // ---- Código para instalación PWA ----
-
-    let deferredPrompt; // Evento para mostrar el prompt en Android
-    const installBtn = document.getElementById('install-btn');
-    const iosInstallInfo = document.getElementById('ios-install-info');
-    const iosInstallCloseBtn = document.getElementById('ios-install-close');
-
-    // Detecta iOS Safari
-    const isIos = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      return /iphone|ipad|ipod/.test(userAgent) && !window.MSStream;
-    };
-
-    // Detecta si la app ya está instalada (iOS o Android)
-    const isInStandaloneMode = () =>
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-
-    // Muestra burbuja en Android cuando se pueda instalar
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (!isInStandaloneMode()) {
-        installBtn.classList.add('show');
-      }
-    });
-
-    // Al hacer click en el botón de instalar (Android)
-    installBtn.addEventListener('click', async () => {
-      installBtn.classList.remove('show');
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('Usuario aceptó instalar la app');
-        } else {
-          console.log('Usuario rechazó instalar la app');
-        }
-        deferredPrompt = null;
-      }
-    });
-
-    // Muestra cuadro en iOS si no está instalada
-    window.addEventListener('load', () => {
-      if (isIos() && !isInStandaloneMode()) {
-        if (!localStorage.getItem('iosInstallInfoDismissed')) {
-          iosInstallInfo.classList.add('show');
-        }
-      }
-    });
-
-    // Botón cerrar cuadro iOS
-    iosInstallCloseBtn.addEventListener('click', () => {
-      iosInstallInfo.classList.remove('show');
-      localStorage.setItem('iosInstallInfoDismissed', 'true');
-    });
-  </script>
-
+  <script src="./script.js"></script>
 </body>
 </html>
