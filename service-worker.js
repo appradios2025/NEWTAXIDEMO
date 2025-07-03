@@ -7,7 +7,7 @@ const urlsToCache = [
   './style.css',
   './script.js',
   './assets/michaellogo.png',
-  './assets/taximichael.png',
+  './taximichael.webp',
   './iconologo.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
