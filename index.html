@@ -1,15 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <title>Michael Taxi LLC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="./manifest.json" />
+  <link rel="manifest" href="/manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="MICHAEL TAXI LLC" />
   <link rel="apple-touch-icon" href="iconologo.png" />
 
-  <!-- Font Awesome -->
+  <!-- Font Awesome para íconos redes sociales -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -21,12 +22,226 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <link rel="stylesheet" href="./style.css" />
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: Arial, sans-serif;
+      background: url('fondotaximichael.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #222;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 10px 20px;
+      background: #0d47a1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #logo {
+      height: 60px;
+    }
+
+    #map-container {
+      margin: 20px auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      border: 5px solid #0d47a1;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    #player-container {
+      width: 320px;
+      margin: 20px auto 5px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 77, 64, 0.5);
+      padding: 10px;
+      text-align: center;
+      user-select: none;
+    }
+
+    #controls {
+      margin-top: 10px;
+    }
+
+    #controls button {
+      background: #0d47a1;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      padding: 8px 15px;
+      margin: 0 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    #controls button:hover {
+      background: #00796b;
+    }
+
+    .track-name {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #0d47a1;
+    }
+
+    /* WhatsApp separado y centrado */
+    #whatsapp-eds {
+      margin: 8px auto 12px auto;
+      background: #25d366;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 30px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      animation: pulseWhatsApp 2.5s ease-in-out infinite;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    #whatsapp-eds i {
+      font-size: 22px;
+      filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes pulseWhatsApp {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 8px rgba(37, 211, 102, 0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 6px 12px rgba(37, 211, 102, 1); }
+    }
+
+    #social-bubbles {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 0 0 15px 0;
+    }
+
+    #social-bubbles a {
+      font-size: 32px;
+      color: #0d47a1;
+      background: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 77, 64, 0.5);
+      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+      text-decoration: none;
+    }
+
+    #social-bubbles a:hover {
+      transform: scale(1.2);
+      background: #0d47a1;
+      color: white;
+    }
+
+    /* Taxi animación */
+    #taxi {
+      position: fixed;
+      bottom: 20px;
+      left: -120px;
+      width: 100px;
+      height: 50px;
+      background: url("assets/taximichael.png") no-repeat center/contain;
+      pointer-events: none;
+      z-index: 9999;
+      animation: taxiMove 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes taxiMove {
+      0% { left: -120px; }
+      100% { left: 110vw; }
+    }
+
+    /* Burbuja azul para instalar app en Android */
+    #install-bubble {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background-color: #0d47a1;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.8);
+      cursor: pointer;
+      user-select: none;
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #install-bubble i {
+      font-size: 20px;
+    }
+
+    /* Cuadro informativo para iPhone */
+    #ios-install-instructions {
+      position: fixed;
+      bottom: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13, 71, 161, 0.95);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 15px;
+      font-size: 15px;
+      max-width: 280px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.9);
+      user-select: none;
+      z-index: 10001;
+      display: none;
+    }
+
+    #ios-install-instructions button {
+      margin-top: 12px;
+      background: #25d366;
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img id="logo" src="assets/michaellogo.png" alt="Logo Michael Taxi" />
+    <img id="logo" src="assets/michaellogo.png" alt="Michael Taxi LLC" />
   </header>
 
   <div id="map-container">
@@ -52,7 +267,7 @@
     rel="noopener noreferrer"
     aria-label="Escríbenos por WhatsApp"
   >
-    <i class="fab fa-whatsapp"></i> Pide tu Taxi aqui!
+    <i class="fab fa-whatsapp"></i> Pide tu Taxi aquí!
   </a>
 
   <div id="social-bubbles">
@@ -69,24 +284,249 @@
 
   <div id="taxi"></div>
 
-  <!-- Burbuja Descargar App para Android -->
-  <div id="install-banner" style="display:none;">
-    <button id="btn-install-app">⬇️ Descargar app</button>
-    <button id="btn-install-close" aria-label="Cerrar aviso">✖️</button>
+  <!-- Burbuja azul para Android instalar app -->
+  <div id="install-bubble" role="button" tabindex="0" aria-label="Instalar la aplicación">
+    <i class="fa fa-download"></i> Descargar app
   </div>
 
-  <!-- Cuadro info para iPhone -->
-  <div id="ios-instruction" style="display:none;">
-    <p>
-      Para instalar esta app en tu iPhone: <br />
-      Presiona el ícono <strong>Compartir</strong> abajo y luego <strong>Agregar a pantalla de inicio</strong>.
-    </p>
-    <button id="btn-ios-close" aria-label="Cerrar instrucciones">Cerrar</button>
+  <!-- Cuadro informativo para iPhone -->
+  <div id="ios-install-instructions" role="dialog" aria-modal="true">
+    <div>
+      Para instalar la app: toca el botón "Compartir" <br />
+      y luego "Agregar a pantalla de inicio".
+    </div>
+    <button id="ios-close-btn" aria-label="Cerrar instrucciones">Cerrar</button>
   </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script src="./script.js"></script>
+  <script>
+    // --- MAPA CON GEOLOCALIZACIÓN ---
+    document.addEventListener("DOMContentLoaded", function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            const map = L.map("map").setView([lat, lng], 15);
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+              maxZoom: 19,
+              attribution: "&copy; OpenStreetMap contributors",
+            }).addTo(map);
+
+            L.marker([lat, lng])
+              .addTo(map)
+              .bindPopup("Estás aquí")
+              .openPopup();
+          },
+          function () {
+            document.getElementById("map").innerHTML =
+              "<p>No se pudo obtener tu ubicación.</p>";
+          }
+        );
+      } else {
+        document.getElementById("map").innerHTML =
+          "<p>Tu navegador no soporta geolocalización.</p>";
+      }
+    });
+
+    // --- REPRODUCTOR DE AUDIO ---
+    const songs = [
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/BACHATA%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHECHA%20ECUATORIANA%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/CHICHA%20ECUATORIANA%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/DJ%20PARTY%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MAMBO%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/MERENGUE%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%202.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/REGGAETON%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%202%20.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%203.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%204.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/SALSA%20MIX%205.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%201.mp3",
+      "https://ia600906.us.archive.org/2/items/reproductor_202506/VALLENATO%20MIX%202.mp3"
+    ];
+
+    const trackNames = [
+      "Bachata Mix 1",
+      "Chicha Ecuatoriana 3",
+      "Mambo Mix 4",
+      "Reggaeton Mix 2",
+      "Salsa Mix 3",
+      "Vallenato Mix 5",
+      "Bachata Mix 1",
+      "Bachata Mix 2",
+      "Bachata Mix 3",
+      "Bachata Mix 4",
+      "Bachata Mix 5",
+      "Checha Ecuatoriana 2",
+      "Chicha Ecuatoriana 1",
+      "Chicha Ecuatoriana 3",
+      "Chicha Ecuatoriana 4",
+      "Chicha Ecuatoriana 5",
+      "DJ Party Mix 1",
+      "DJ Party Mix 2",
+      "DJ Party Mix 3",
+      "DJ Party Mix 4",
+      "DJ Party Mix 5",
+      "Mambo Mix 1",
+      "Mambo Mix 2",
+      "Mambo Mix 3",
+      "Mambo Mix 4",
+      "Mambo Mix 5",
+      "Merengue Mix 1",
+      "Merengue Mix 2",
+      "Merengue Mix 3",
+      "Merengue Mix 4",
+      "Merengue Mix 5",
+      "Reggaeton Mix 1",
+      "Reggaeton Mix 2",
+      "Reggaeton Mix 3",
+      "Reggaeton Mix 4",
+      "Reggaeton Mix 5",
+      "Salsa Mix 1",
+      "Salsa Mix 2",
+      "Salsa Mix 3",
+      "Salsa Mix 4",
+      "Salsa Mix 5",
+      "Vallenato Mix 1",
+      "Vallenato Mix 2"
+    ];
+
+    const audio = document.getElementById("audio");
+    const trackName = document.getElementById("trackName");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+
+    let currentIndex = 0;
+
+    function loadSong(index) {
+      audio.src = songs[index];
+      trackName.textContent = trackNames[index] || "Canción sin nombre";
+      audio.load();
+    }
+
+    function playSong() {
+      audio.play();
+      playPauseBtn.textContent = "⏸️";
+    }
+
+    function pauseSong() {
+      audio.pause();
+      playPauseBtn.textContent = "▶️";
+    }
+
+    function togglePlayPause() {
+      if (audio.paused) {
+        playSong();
+      } else {
+        pauseSong();
+      }
+    }
+
+    function nextSong() {
+      currentIndex++;
+      if (currentIndex >= songs.length) currentIndex = 0;
+      loadSong(currentIndex);
+      playSong();
+    }
+
+    function prevSong() {
+      currentIndex--;
+      if (currentIndex < 0) currentIndex = songs.length - 1;
+      loadSong(currentIndex);
+      playSong();
+    }
+
+    audio.addEventListener("ended", () => {
+      nextSong();
+    });
+
+    // Carga inicial
+    loadSong(currentIndex);
+
+    // --- BURBUJA DE INSTALACIÓN PWA ---
+
+    let deferredPrompt;
+    const installBubble = document.getElementById("install-bubble");
+    const iosInstructions = document.getElementById("ios-install-instructions");
+    const iosCloseBtn = document.getElementById("ios-close-btn");
+
+    // Detecta plataforma iOS
+    const isIos = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      return /iphone|ipad|ipod/.test(userAgent);
+    };
+
+    // Detecta si la app ya está instalada
+    const isInStandaloneMode = () =>
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Solo mostrar en Android (no iOS) y si no está instalada
+      if (!isIos() && !isInStandaloneMode()) {
+        installBubble.style.display = "flex";
+      }
+    });
+
+    installBubble.addEventListener("click", async () => {
+      installBubble.style.display = "none";
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") {
+          console.log("App instalada");
+        } else {
+          console.log("App no instalada");
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    // Mostrar instrucciones en iOS si no está instalada
+    if (isIos() && !isInStandaloneMode()) {
+      iosInstructions.style.display = "block";
+    }
+
+    iosCloseBtn.addEventListener("click", () => {
+      iosInstructions.style.display = "none";
+    });
+  </script>
 </body>
 </html>
