@@ -9,12 +9,12 @@
   "description": "App PWA de Michael Taxi LLC",
   "icons": [
     {
-      "src": "iconologo.png",
+      "src": "iconodeapp.webp",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "iconologo.png",
+      "src": "LOGOicono.webp",
       "sizes": "512x512",
       "type": "image/png"
     }
