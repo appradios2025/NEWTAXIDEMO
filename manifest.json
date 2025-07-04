@@ -2,7 +2,8 @@
 {
   "name": "Michael Taxi LLC",
   "short_name": "MICHAELTAXI",
-  "start_url": ".",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0D47A1",
   "theme_color": "#0D47A1",
