@@ -23,61 +23,6 @@
   />
 
   <link rel="stylesheet" href="style.css" />
-
-  <style>
-    /* Burbuja azul para instalar en Android */
-    #install-bubble {
-      position: fixed;
-      bottom: 70px;
-      right: 20px;
-      background: #007aff;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-weight: 600;
-      cursor: pointer;
-      z-index: 10001;
-      user-select: none;
-      display: none;
-      font-family: Arial, sans-serif;
-      transition: transform 0.3s ease;
-    }
-    #install-bubble:hover {
-      background: #005bb5;
-      transform: scale(1.05);
-    }
-
-    /* Cuadro info para iPhone */
-    #ios-install-info {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0d47a1;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 15px;
-      max-width: 300px;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      z-index: 10002;
-      display: none;
-    }
-    #ios-install-info button {
-      margin-top: 10px;
-      background: #25d366;
-      border: none;
-      border-radius: 20px;
-      padding: 6px 12px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-      font-size: 14px;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -85,7 +30,7 @@
   </header>
 
   <div id="map-container">
-    <div id="map"></div>
+    <div id="map" style="height: 300px; width: 100%;"></div>
   </div>
 
   <div id="player-container">
@@ -123,63 +68,53 @@
   <div id="taxi"></div>
 
   <!-- Burbuja instalar para Android -->
-  <div id="install-bubble">📲 Descargar app</div>
+  <div id="install-bubble" style="display: none; position: fixed; bottom: 70px; right: 20px; background: #007aff; color: white; padding: 12px 20px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-weight: 600; cursor: pointer; z-index: 10001; user-select: none; font-family: Arial, sans-serif; transition: transform 0.3s ease;">📲 Descargar app</div>
 
   <!-- Cuadro info iPhone -->
-  <div id="ios-install-info">
+  <div id="ios-install-info" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0d47a1; color: white; padding: 15px 20px; border-radius: 15px; max-width: 300px; font-family: Arial, sans-serif; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10002;">
     Para instalar esta app en tu iPhone, toca el botón <strong>Compartir</strong> y luego <strong>Agregar a pantalla de inicio</strong>.
-    <button id="close-ios-info">Cerrar</button>
+    <button id="close-ios-info" style="margin-top: 10px; background: #25d366; border: none; border-radius: 20px; padding: 6px 12px; color: white; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px;">Cerrar</button>
   </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="script.js"></script>
 
   <script>
-    // -- Instalación PWA --
     let deferredPrompt;
-    const installBubble = document.getElementById('install-bubble');
-    const iosInstallInfo = document.getElementById('ios-install-info');
-    const closeIosBtn = document.getElementById('close-ios-info');
-
-    // Detectar plataforma
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
     const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
 
-    // Para iOS: mostrar cuadro info si no está instalada y no cerrado por el usuario
-    function showIosInstallInfo() {
-      if (!isInStandaloneMode && !localStorage.getItem('iosInstallInfoClosed')) {
+    window.addEventListener('load', () => {
+      const installBubble = document.getElementById('install-bubble');
+      const iosInstallInfo = document.getElementById('ios-install-info');
+      const closeIosBtn = document.getElementById('close-ios-info');
+
+      // Mostrar info iOS si aplica
+      if (isIos && !isInStandaloneMode && !localStorage.getItem('iosInstallInfoClosed')) {
         iosInstallInfo.style.display = 'block';
       }
-    }
 
-    closeIosBtn.addEventListener('click', () => {
-      iosInstallInfo.style.display = 'none';
-      localStorage.setItem('iosInstallInfoClosed', 'true');
-    });
+      closeIosBtn.addEventListener('click', () => {
+        iosInstallInfo.style.display = 'none';
+        localStorage.setItem('iosInstallInfoClosed', 'true');
+      });
 
-    // Para Android: interceptar evento beforeinstallprompt para mostrar burbuja
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBubble.style.display = 'block';
-    });
+      // Burbuja Android
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBubble.style.display = 'block';
 
-    installBubble.addEventListener('click', async () => {
-      installBubble.style.display = 'none';
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-      }
-    });
-
-    // Al cargar la página:
-    window.addEventListener('load', () => {
-      if (isIos) {
-        showIosInstallInfo();
-      }
+        installBubble.addEventListener('click', async () => {
+          installBubble.style.display = 'none';
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+          }
+        });
+      });
     });
   </script>
 </body>
