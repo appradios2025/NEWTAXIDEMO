@@ -81,41 +81,47 @@
   <script src="script.js"></script>
 
   <script>
-    let deferredPrompt;
-    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+  let deferredPrompt;
+  const installBubble = document.getElementById('install-bubble');
+  const iosInstallInfo = document.getElementById('ios-install-info');
+  const closeIosBtn = document.getElementById('close-ios-info');
 
-    window.addEventListener('load', () => {
-      const installBubble = document.getElementById('install-bubble');
-      const iosInstallInfo = document.getElementById('ios-install-info');
-      const closeIosBtn = document.getElementById('close-ios-info');
+  const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
 
-      // Mostrar info iOS si aplica
-      if (isIos && !isInStandaloneMode && !localStorage.getItem('iosInstallInfoClosed')) {
-        iosInstallInfo.style.display = 'block';
-      }
+  function showIosInstallInfo() {
+    if (!isInStandaloneMode && !localStorage.getItem('iosInstallInfoClosed')) {
+      iosInstallInfo.style.display = 'block';
+    }
+  }
 
-      closeIosBtn.addEventListener('click', () => {
-        iosInstallInfo.style.display = 'none';
-        localStorage.setItem('iosInstallInfoClosed', 'true');
-      });
+  closeIosBtn.addEventListener('click', () => {
+    iosInstallInfo.style.display = 'none';
+    localStorage.setItem('iosInstallInfoClosed', 'true');
+  });
 
-      // Burbuja Android
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installBubble.style.display = 'block';
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBubble) {
+      installBubble.style.display = 'block'; // 🔥 Aquí la mostramos correctamente
+    }
+  });
 
-        installBubble.addEventListener('click', async () => {
-          installBubble.style.display = 'none';
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            deferredPrompt = null;
-          }
-        });
-      });
-    });
-  </script>
+  installBubble.addEventListener('click', async () => {
+    installBubble.style.display = 'none';
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    if (isIos) {
+      showIosInstallInfo();
+    }
+  });
+</script>
 </body>
 </html>

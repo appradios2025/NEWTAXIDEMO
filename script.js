@@ -108,9 +108,7 @@ function prevSong() {
 }
 
 audio.addEventListener("ended", nextSong);
-
-// Cargar la primera canción al iniciar
-loadSong(currentIndex);
+loadSong(currentIndex); // Inicia con la primera canción
 
 // ======= TAXI ANIMACIÓN ============
 document.body.addEventListener("click", () => {
@@ -135,30 +133,15 @@ window.addEventListener("load", () => {
       e.preventDefault();
       deferredPrompt = e;
 
-      // Mostrar la burbuja azul solo si no existe
-      if (!document.getElementById("install-bubble")) {
-        const bubble = document.createElement("div");
-        bubble.id = "install-bubble";
-        bubble.innerHTML = "📲 Instalar app";
-        bubble.style.position = "fixed";
-        bubble.style.bottom = "80px";
-        bubble.style.right = "20px";
-        bubble.style.background = "#2196f3";
-        bubble.style.color = "#fff";
-        bubble.style.padding = "12px 20px";
-        bubble.style.borderRadius = "25px";
-        bubble.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
-        bubble.style.cursor = "pointer";
-        bubble.style.zIndex = "10000";
-        bubble.style.fontWeight = "bold";
-
-        document.body.appendChild(bubble);
+      const bubble = document.getElementById("install-bubble");
+      if (bubble) {
+        bubble.style.display = "block";
 
         bubble.addEventListener("click", () => {
           deferredPrompt.prompt();
           deferredPrompt.userChoice.then(() => {
             deferredPrompt = null;
-            bubble.remove();
+            bubble.style.display = "none";
           });
         });
       }
